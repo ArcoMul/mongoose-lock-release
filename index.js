@@ -10,7 +10,7 @@ module.exports = function lockReleasePlugin (schema, modelName) {
         }
     });
 
-    schema.methods.lock = function lockInvoice (duration, cb) {
+    schema.methods.lock = function lock (duration, cb) {
         var now = new Date();
         this.model(modelName).findOneAndUpdate({
             _id: this._id,
@@ -24,7 +24,7 @@ module.exports = function lockReleasePlugin (schema, modelName) {
         }, cb);
     };
 
-    schema.methods.release = function releaseInvoice (cb) {
+    schema.methods.release = function release (cb) {
         this.model(modelName).findOneAndUpdate({
             _id: this._id,
         }, {
@@ -32,5 +32,9 @@ module.exports = function lockReleasePlugin (schema, modelName) {
         }, {
             new: true
         }, cb);
+    };
+
+    schema.methods.isLocked = function isLocked (cb) {
+        return this.locked > new Date();
     };
 }
